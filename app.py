@@ -8,24 +8,40 @@ import heapq
 from pathlib import Path
 
 # ============================================
-# CONFIGURACIÓN DE LA APP
+# CONFIGURACIÓN
 # ============================================
 
 st.set_page_config(
-    page_title="Simulador Ecobici Rosario",
+    page_title="Mi Bici Tu Bici - Simulador",
     page_icon="🚴",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
+# Logo en header
+col_logo, col_titulo = st.columns([1, 4])
+with col_logo:
+    st.image("mbtb.jpg", width=120)
+with col_titulo:
+    st.title("Sistema Mi Bici Tu Bici - Rosario")
+    st.markdown("**Distrito Centro** | Simulación de Eventos Discretos")
+
+st.markdown("---")
+
+# CSS personalizado
 st.markdown("""
     <style>
-    .big-font {font-size:20px !important; font-weight:bold;}
-    .metric-box {
-        background-color: #f0f2f6;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 8px 0;
+    .metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+    }
+    .resultado-box {
+        background-color: #1e1e1e;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #00d4ff;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -36,43 +52,27 @@ st.markdown("""
 
 @st.cache_data
 def cargar_datos():
-    """Carga todos los archivos exportados desde Colab"""
     data_dir = Path("data")
-    
-    # Parámetros
     with open(data_dir / "parametros_simulacion.json", 'r') as f:
         parametros = json.load(f)
-    
-    # Datos empíricos
     interarribos = np.load(data_dir / "interarribos_empiricos.npy")
     duraciones = np.load(data_dir / "duraciones_empiricas.npy")
-    
-    # Resultados del análisis
     df_resultados = pd.read_csv(data_dir / "resultados_busqueda_binaria.csv")
     df_resumen = pd.read_csv(data_dir / "resumen_ejecutivo.csv")
-    
-    # Metadata
     with open(data_dir / "metadata_analisis.json", 'r') as f:
         metadata = json.load(f)
-    
     return parametros, interarribos, duraciones, df_resultados, df_resumen, metadata
 
-# Cargar datos
 parametros, interarribos_emp, duraciones_emp, df_resultados, df_resumen, metadata = cargar_datos()
 
 # ============================================
-# FUNCIÓN DE SIMULACIÓN (DES)
+# FUNCIÓN DES
 # ============================================
 
 def simular_escenario(s0, factor_demanda, leak_pct, horizonte_dias, n_reps, 
                       interarribos, duraciones):
-    """
-    Simulación DES con parámetros ajustables.
-    Retorna: dict con métricas agregadas
-    """
     tiempo_sim = horizonte_dias * 24 * 60
     leak_prob = leak_pct / 100.0
-    
     rechazos_lista = []
     stock_prom_lista = []
     
@@ -83,10 +83,7 @@ def simular_escenario(s0, factor_demanda, leak_pct, horizonte_dias, n_reps,
         rechazos = 0
         llegadas = 0
         historico_stock = []
-        
         eventos = []
-        
-        # Primer arribo (escalado por factor demanda)
         inter = np.random.choice(interarribos) / factor_demanda
         heapq.heappush(eventos, (inter, 'arribo'))
         
@@ -99,25 +96,19 @@ def simular_escenario(s0, factor_demanda, leak_pct, horizonte_dias, n_reps,
                 llegadas += 1
                 if stock > 0:
                     stock -= 1
-                    # Aplicar leak
                     if np.random.rand() > leak_prob:
                         dur = float(np.random.choice(duraciones))
                         heapq.heappush(eventos, (t + dur, 'retorno'))
                 else:
                     rechazos += 1
-                
-                # Próximo arribo
                 inter = np.random.choice(interarribos) / factor_demanda
                 prox = t + inter
                 if prox < tiempo_sim:
                     heapq.heappush(eventos, (prox, 'arribo'))
-                    
             elif tipo == 'retorno':
                 stock += 1
-            
             historico_stock.append(stock)
         
-        # Métricas
         pct_rech = (rechazos / llegadas * 100) if llegadas > 0 else 0
         rechazos_lista.append(pct_rech)
         stock_prom_lista.append(np.mean(historico_stock) if historico_stock else s0)
@@ -130,93 +121,102 @@ def simular_escenario(s0, factor_demanda, leak_pct, horizonte_dias, n_reps,
         'distribucion_rechazos': rechazos_lista
     }
 
-# ============================================
-# SIDEBAR - CONTROLES
-# ============================================
-
-st.sidebar.title("🎛️ Controles de Simulación")
-
-st.sidebar.markdown("### 📦 Stock Inicial")
-s0_usuario = st.sidebar.slider(
-    "S₀ (bicis disponibles)",
-    min_value=0,
-    max_value=150,
-    value=parametros['s0_recomendado'],
-    step=5,
-    help="Stock inicial de bicis en Distrito Centro"
-)
-
-st.sidebar.markdown("### 📈 Demanda")
-factor_demanda = st.sidebar.slider(
-    "Factor de demanda (m)",
-    min_value=0.5,
-    max_value=2.0,
-    value=1.0,
-    step=0.1,
-    help="Multiplica la tasa de arribos λ. 1.0 = demanda actual, 1.5 = +50%"
-)
-
-st.sidebar.markdown("### 🔴 Leak (Fuga)")
-leak_usuario = st.sidebar.slider(
-    "% de bicis que no retornan",
-    min_value=0.0,
-    max_value=20.0,
-    value=parametros['leak_mediana']*100,
-    step=0.5,
-    help="Porcentaje de viajes donde la bici no vuelve al sistema"
-)
-
-st.sidebar.markdown("### ⚙️ Simulación")
-horizonte_dias = st.sidebar.selectbox(
-    "Horizonte temporal",
-    options=[7, 14, 30],
-    index=0,
-    format_func=lambda x: f"{x} días"
-)
-
-n_replicas = st.sidebar.selectbox(
-    "Réplicas Monte Carlo",
-    options=[100, 300, 500],
-    index=1
-)
-
-boton_simular = st.sidebar.button("🚀 SIMULAR", type="primary", use_container_width=True)
 
 # ============================================
-# VISTA PRINCIPAL
+# TABS
 # ============================================
 
-st.title("🚴 Simulador de Sistema Ecobici - Distrito Centro")
-st.markdown("**Análisis de escenarios con Monte Carlo | Modelos y Simulación**")
+tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "📈 Resultados Empíricos"])
 
-# Tabs
-tab1, tab2, tab3 = st.tabs(["📊 Resumen Ejecutivo", "🎮 Simulador", "📈 Análisis Original"])
+# ─────────────────────────────────────────────────────────
+# TAB 1: DASHBOARD
+# ─────────────────────────────────────────────────────────
 
-# --- TAB 1: RESUMEN ---
 with tab1:
-    st.header("Situación Actual del Sistema")
+    st.header("Resumen del Sistema")
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("λ (arribos)", f"{parametros['lambda_global']:.2f} /h")
+        st.metric("🚴 λ (arribos/h)", f"{parametros['lambda_global']:.2f}")
     with col2:
-        st.metric("Duración media", f"{parametros['duracion_media_min']:.1f} min")
+        st.metric("⏱️ Duración media", f"{parametros['duracion_media_min']:.0f} min")
     with col3:
-        st.metric("Leak empírico", f"{parametros['leak_mediana']*100:.1f}%")
+        st.metric("🔴 Leak empírico", f"{parametros['leak_mediana']*100:.1f}%")
     with col4:
-        st.metric("S₀ recomendado", f"{parametros['s0_recomendado']} bicis")
+        st.metric("✅ S₀ óptimo", f"{parametros['s0_recomendado']} bicis")
     
-    st.info("ℹ️ El sistema está **balanceado**: las devoluciones compensan los retiros en el largo plazo.")
-    
-    st.subheader("Comparación de Escenarios")
+    st.markdown("---")
+    st.subheader("Comparación de Escenarios Analizados")
     st.dataframe(df_resumen, use_container_width=True, hide_index=True)
-
-# --- TAB 2: SIMULADOR ---
-with tab2:
-    st.header("Simular Escenario Personalizado")
     
+    st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
+
+# ─────────────────────────────────────────────────────────
+# TAB 2: SIMULADOR (CONTROLES INTEGRADOS)
+# ─────────────────────────────────────────────────────────
+
+with tab2:
+    st.header("Simulador de Escenarios")
+    
+    # CONTROLES EN COLUMNAS (NO SIDEBAR)
+    st.markdown("### ⚙️ Configuración del Escenario")
+    
+    col_s0, col_demanda, col_leak = st.columns(3)
+    
+    with col_s0:
+        s0_usuario = st.number_input(
+            "📦 Stock Inicial (S₀)",
+            min_value=0,
+            max_value=150,
+            value=67,
+            step=5,
+            help="Bicis disponibles al inicio de la simulación"
+        )
+    
+    with col_demanda:
+        factor_demanda = st.slider(
+            "📈 Factor Demanda (m)",
+            min_value=0.5,
+            max_value=2.0,
+            value=1.0,
+            step=0.1,
+            help="1.0 = demanda actual, 1.5 = +50% de arribos"
+        )
+    
+    with col_leak:
+        leak_usuario = st.slider(
+            "🔴 Leak (%)",
+            min_value=0.0,
+            max_value=20.0,
+            value=0.6,
+            step=0.5,
+            help="% de bicis que no retornan al sistema"
+        )
+    
+    col_hz, col_reps = st.columns(2)
+    
+    with col_hz:
+        horizonte_dias = st.selectbox(
+            "🕐 Horizonte Temporal",
+            options=[7, 14, 30],
+            index=0,
+            format_func=lambda x: f"{x} días"
+        )
+    
+    with col_reps:
+        n_replicas = st.selectbox(
+            "🔁 Réplicas Monte Carlo",
+            options=[100, 300, 500, 1000],
+            index=1
+        )
+    
+    # BOTÓN GRANDE
+    st.markdown("---")
+    boton_simular = st.button("🚀 EJECUTAR SIMULACIÓN", type="primary", use_container_width=True)
+    
+    # RESULTADOS
     if boton_simular:
-        with st.spinner("🔄 Simulando... (esto puede tomar unos segundos)"):
+        with st.spinner("⏳ Simulando... (esto puede tomar 10-30 segundos)"):
             resultados = simular_escenario(
                 s0=s0_usuario,
                 factor_demanda=factor_demanda,
@@ -229,81 +229,104 @@ with tab2:
         
         st.success("✅ Simulación completada")
         
-        # Métricas principales
-        col1, col2, col3 = st.columns(3)
-        
+        # MÉTRICAS EN CARDS
         pct_medio = resultados['pct_rechazos_media']
         ic_low, ic_up = resultados['pct_rechazos_ic95']
+        cumple = ic_up < 5.0
+        
+        col1, col2, col3 = st.columns(3)
         
         with col1:
-            delta_color = "inverse" if pct_medio < 5 else "normal"
-            st.metric(
-                "% Rechazos",
-                f"{pct_medio:.2f}%",
-                delta=f"IC95: [{ic_low:.1f}%, {ic_up:.1f}%]"
-            )
+            st.markdown(f"""
+            <div class="resultado-box">
+            <h3>% Rechazos Promedio</h3>
+            <h1 style="color: {'#00ff00' if cumple else '#ff4444'};">{pct_medio:.2f}%</h1>
+            <p>IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col2:
-            st.metric(
-                "Stock Promedio",
-                f"{resultados['stock_promedio']:.1f} bicis",
-                delta=f"{resultados['stock_promedio']/s0_usuario*100:.0f}% de S₀"
-            )
+            st.markdown(f"""
+            <div class="resultado-box">
+            <h3>Stock Promedio</h3>
+            <h1 style="color: #00d4ff;">{resultados['stock_promedio']:.1f}</h1>
+            <p>Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
+            </div>
+            """, unsafe_allow_html=True)
         
         with col3:
-            cumple = "✅ Cumple" if ic_up < 5 else "❌ No cumple"
-            st.metric("Criterio (IC95<5%)", cumple)
+            estado = "✅ CUMPLE" if cumple else "❌ NO CUMPLE"
+            color = "#00ff00" if cumple else "#ff4444"
+            st.markdown(f"""
+            <div class="resultado-box">
+            <h3>Criterio (IC95 < 5%)</h3>
+            <h1 style="color: {color};">{estado}</h1>
+            <p>Nivel de servicio: {100-ic_up:.1f}%</p>
+            </div>
+            """, unsafe_allow_html=True)
         
-        # Gráfico de distribución
-        st.subheader("Distribución de % Rechazos")
-        fig_hist = go.Figure()
-        fig_hist.add_histogram(x=resultados['distribucion_rechazos'], 
-                              nbinsx=30, name='Frecuencia',
-                              marker_color='steelblue')
-        fig_hist.add_vline(x=5, line_dash="dash", line_color="red",
-                         annotation_text="Umbral 5%")
-        fig_hist.update_layout(
-            xaxis_title="% Rechazos",
-            yaxis_title="Frecuencia",
-            height=400,
-            template='plotly_white'
+        # GRÁFICO DE DISTRIBUCIÓN
+        st.markdown("---")
+        st.subheader("Distribución Empírica de Rechazos (Monte Carlo)")
+        
+        fig = go.Figure()
+        fig.add_histogram(
+            x=resultados['distribucion_rechazos'],
+            nbinsx=40,
+            name='Frecuencia',
+            marker_color='rgba(0, 212, 255, 0.7)',
+            marker_line_color='white',
+            marker_line_width=1
         )
-        st.plotly_chart(fig_hist, use_container_width=True)
+        fig.add_vline(x=5, line_dash="dash", line_color="red", line_width=3,
+                     annotation_text="Umbral 5%", annotation_position="top right")
+        fig.add_vline(x=pct_medio, line_dash="dot", line_color="green", line_width=2,
+                     annotation_text=f"Media: {pct_medio:.1f}%", annotation_position="top left")
+        fig.update_layout(
+            xaxis_title="% Rechazos por Réplica",
+            yaxis_title="Frecuencia",
+            height=450,
+            template='plotly_dark',
+            hovermode='x'
+        )
+        st.plotly_chart(fig, use_container_width=True)
         
-        # Interpretación
-        if ic_up < 5:
-            st.success(f"✅ **ESCENARIO VIABLE**: Con S₀={s0_usuario} y estos parámetros, "
-                      f"el sistema cumple el criterio de servicio (<5% rechazos).")
-        elif pct_medio < 5:
-            st.warning(f"⚠️ **BORDERLINE**: El promedio es aceptable pero el IC95 superior "
-                      f"({ic_up:.1f}%) supera el 5%. Considerar aumentar S₀.")
+        # INTERPRETACIÓN AUTOMÁTICA
+        st.markdown("### 💬 Interpretación")
+        if cumple:
+            st.success(f"✅ **Escenario viable.** Con S₀={s0_usuario} bicis y los parámetros seleccionados, el sistema garantiza <5% de rechazos con 95% de confianza. El nivel de servicio esperado es del {100-ic_up:.1f}%.")
         else:
-            st.error(f"❌ **INSUFICIENTE**: Con estos parámetros se esperan {pct_medio:.1f}% "
-                    f"de rechazos. Aumentar S₀ o mejorar el leak.")
+            st.error(f"❌ **Escenario insuficiente.** El IC95 superior ({ic_up:.1f}%) supera el umbral del 5%. Se recomienda aumentar S₀ o reducir el factor de demanda. Nivel de servicio: {100-ic_up:.1f}%.")
     
     else:
-        st.info("👈 Ajustá los parámetros en el panel izquierdo y presioná **SIMULAR**")
+        st.info("👆 Ajustá los parámetros arriba y presioná **EJECUTAR SIMULACIÓN**")
 
-# --- TAB 3: ANÁLISIS ORIGINAL ---
+# ─────────────────────────────────────────────────────────
+# TAB 3: ANÁLISIS EMPÍRICO
+# ─────────────────────────────────────────────────────────
+
 with tab3:
-    st.header("Resultados del Análisis Original")
+    st.header("Resultados del Análisis Empírico")
+    st.subheader("Curva de Sensibilidad: S₀ vs % Rechazos")
     
-    st.subheader("Curva de Sensibilidad S₀ vs % Rechazos")
-    
-    # Gráfico original
     fig = go.Figure()
-    fig.add_scatter(x=df_resultados['S0'], y=df_resultados['pct_medio'],
-                   mode='lines+markers', name='% Rechazos',
-                   line=dict(color='steelblue', width=3))
+    fig.add_scatter(
+        x=df_resultados['S0'],
+        y=df_resultados['pct_medio'],
+        mode='lines+markers',
+        name='% Rechazos',
+        line=dict(color='cyan', width=3),
+        marker=dict(size=8)
+    )
     fig.add_hline(y=5, line_dash="dash", line_color="red",
-                 annotation_text="Umbral 5%")
+                 annotation_text="Umbral 5%", annotation_position="right")
     fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
-                 line_color="green", annotation_text=f"S₀={parametros['s0_recomendado']}")
+                 line_color="lime", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
     fig.update_layout(
         xaxis_title="Stock Inicial (S₀)",
-        yaxis_title="% Rechazos",
+        yaxis_title="% Rechazos Medio",
         height=500,
-        template='plotly_white'
+        template='plotly_dark'
     )
     st.plotly_chart(fig, use_container_width=True)
     
@@ -312,10 +335,12 @@ with tab3:
     with col1:
         st.metric("Observaciones", f"{metadata['n_observaciones']:,}")
     with col2:
-        st.metric("Período", f"{metadata['periodo_inicio']} - {metadata['periodo_fin']}")
+        st.metric("Período", f"{metadata['periodo_inicio']} / {metadata['periodo_fin']}")
     with col3:
-        st.metric("Evaluaciones", metadata['n_evaluaciones'])
+        st.metric("Evaluaciones DES", metadata['n_evaluaciones'])
 
-# Footer
+# FOOTER
 st.markdown("---")
-st.markdown("**Desarrollado para:** Trabajo Práctico de Modelos y Simulación | **Método:** Simulación de eventos discretos (DES) con búsqueda binaria")
+st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
+
