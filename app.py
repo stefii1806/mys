@@ -329,7 +329,7 @@ with tab2:
                      annotation_text="Umbral 5%", annotation_position="top right")
         fig.add_vline(x=pct_medio, line_dash="dot", line_color="green", line_width=2,
                      annotation_text=f"Media: {pct_medio:.1f}%", annotation_position="top left")
-              fig.update_layout(
+            fig.update_layout(
             xaxis_title="% Rechazos por Réplica",
             yaxis_title="Frecuencia",
             height=450,
@@ -391,6 +391,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
