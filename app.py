@@ -448,7 +448,7 @@ with tab2:
             min_value=1,
             max_value=150,
             value=67,
-            step=5,
+            step=1,
             help="Bicis disponibles al inicio"
         )
     
@@ -648,6 +648,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
