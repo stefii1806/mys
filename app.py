@@ -17,7 +17,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado - VERSIÓN CORREGIDA
+# CSS personalizado - VERSIÓN FINAL
 st.markdown("""
     <style>
     /* Fuente global */
@@ -68,7 +68,7 @@ st.markdown("""
         font-family: 'Inter', sans-serif !important;
     }
     
-    /* Tabs - FONDO SUTIL */
+    /* Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         background-color: #f5f5f5;
@@ -89,7 +89,15 @@ st.markdown("""
         color: #0d47a1 !important;
         font-weight: 600;
     }
-
+    
+    /* Fondo sutil para TODAS las tabs */
+    .stTabs > div > div[data-testid="stVerticalBlock"] {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 12px;
+        margin-top: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
     
     /* FORZAR TABLA CON FONDO CLARO */
     div[data-testid="stDataFrame"] {
@@ -100,7 +108,6 @@ st.markdown("""
         background-color: #fafafa !important;
     }
     
-    /* Forzar tema claro en tabla */
     div[data-testid="stDataFrame"] table {
         background-color: #ffffff !important;
     }
@@ -278,18 +285,7 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "�
 with tab1:
        
     st.header("Resumen del Sistema")
-    st.markdown("""
-        <style>
-        .dashboard-container {
-            background-color: #e3f2fd;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 0 auto;
-            max-width: 100%;
-        }
-        </style>
-        <div class="dashboard-container">
-        """, unsafe_allow_html=True)
+    
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -359,7 +355,7 @@ with tab1:
     
     st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
     
-    st.markdown("</div>", unsafe_allow_html=True)
+    
 
 # ─────────────────────────────────────────────────────────
 # TAB 2: SIMULADOR
@@ -547,6 +543,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
