@@ -274,19 +274,21 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "�
 # ─────────────────────────────────────────────────────────
 
 with tab1:
-    st.markdown("""
+       
+    st.header("Resumen del Sistema")
+        st.markdown("""
         <style>
         .dashboard-container {
-            background-color: #f5f5f5;
-            padding: 25px;
+            background-color: #e3f2fd;
+            padding: 30px;
             border-radius: 12px;
+            margin: 0 auto;
+            max-width: 100%;
         }
         </style>
         <div class="dashboard-container">
         """, unsafe_allow_html=True)
-    
-    st.header("Resumen del Sistema")
-    
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("🚴 λ (arribos/h)", f"{parametros['lambda_global']:.2f}")
@@ -543,6 +545,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
