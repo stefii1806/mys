@@ -17,48 +17,115 @@ st.set_page_config(
     layout="wide"
 )
 
-# Logo en header
-col_logo, col_titulo = st.columns([1, 4])
+# CSS personalizado - TEMA CLARO
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #ffffff;
+    }
+    
+    .stMarkdown, p, span, div {
+        color: #1a1a1a !important;
+    }
+    
+    .resultado-box {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        padding: 25px;
+        border-radius: 12px;
+        border-left: 6px solid #0077b6;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    
+    .resultado-box h3 {
+        color: #0d47a1 !important;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .resultado-box h1 {
+        font-weight: 700;
+        margin: 10px 0;
+    }
+    
+    .resultado-box p {
+        color: #424242 !important;
+        font-size: 14px;
+    }
+    
+    h1, h2, h3 {
+        color: #0077b6 !important;
+    }
+    
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: #e3f2fd;
+        border-radius: 8px 8px 0 0;
+        padding: 12px 24px;
+        color: #0077b6;
+        font-weight: 500;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #0077b6;
+        color: white !important;
+    }
+    
+    .stButton>button {
+        background: linear-gradient(135deg, #0096c7 0%, #0077b6 100%);
+        color: white !important;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 28px;
+        font-size: 18px;
+        box-shadow: 0 4px 8px rgba(0,119,182,0.3);
+        transition: all 0.3s;
+    }
+    
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #0077b6 0%, #005f8c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,119,182,0.4);
+    }
+    
+    [data-testid="stMetricValue"] {
+        color: #0077b6 !important;
+        font-size: 28px;
+        font-weight: 700;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #424242 !important;
+        font-weight: 600;
+    }
+    
+    .stAlert {
+        background-color: #e3f2fd;
+        border-left: 4px solid #0077b6;
+    }
+    
+    .stSelectbox label, .stSlider label, .stNumberInput label {
+        color: #0d47a1 !important;
+        font-weight: 600;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# ============================================
+# HEADER CON LOGO
+# ============================================
+
+col_logo, col_titulo = st.columns([0.5, 5])
 with col_logo:
-    st.image("mbtb.png", width=120)
+    st.image("mbtb.png", width=80)
 with col_titulo:
-    st.title("Sistema Mi Bici Tu Bici - Rosario")
-    st.markdown("**Distrito Centro** | Simulación de Eventos Discretos")
+    st.markdown("# Sistema Mi Bici Tu Bici - Rosario")
+    st.markdown("**Distrito Centro** | Simulación de Eventos Discretos + Monte Carlo")
 
 st.markdown("---")
-
-col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            color_rechazo = "#2e7d32" if cumple else "#c62828"  # Verde oscuro / Rojo oscuro
-            st.markdown(f"""
-            <div class="resultado-box">
-            <h3>% Rechazos Promedio</h3>
-            <h1 style="color: {color_rechazo};">{pct_medio:.2f}%</h1>
-            <p>IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown(f"""
-            <div class="resultado-box">
-            <h3>Stock Promedio</h3>
-            <h1 style="color: #01579b;">{resultados['stock_promedio']:.1f}</h1>
-            <p>Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col3:
-            estado = "✅ CUMPLE" if cumple else "❌ NO CUMPLE"
-            color = "#2e7d32" if cumple else "#c62828"
-            st.markdown(f"""
-            <div class="resultado-box">
-            <h3>Criterio (IC95 < 5%)</h3>
-            <h1 style="color: {color};">{estado}</h1>
-            <p>Nivel de servicio: {100-ic_up:.1f}%</p>
-            </div>
-            """, unsafe_allow_html=True)
-
 
 # ============================================
 # CARGAR DATOS
@@ -135,7 +202,6 @@ def simular_escenario(s0, factor_demanda, leak_pct, horizonte_dias, n_reps,
         'distribucion_rechazos': rechazos_lista
     }
 
-
 # ============================================
 # TABS
 # ============================================
@@ -166,13 +232,12 @@ with tab1:
     st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
 
 # ─────────────────────────────────────────────────────────
-# TAB 2: SIMULADOR (CONTROLES INTEGRADOS)
+# TAB 2: SIMULADOR
 # ─────────────────────────────────────────────────────────
 
 with tab2:
     st.header("Simulador de Escenarios")
     
-    # CONTROLES EN COLUMNAS (NO SIDEBAR)
     st.markdown("### ⚙️ Configuración del Escenario")
     
     col_s0, col_demanda, col_leak = st.columns(3)
@@ -184,7 +249,7 @@ with tab2:
             max_value=150,
             value=67,
             step=5,
-            help="Bicis disponibles al inicio de la simulación"
+            help="Bicis disponibles al inicio"
         )
     
     with col_demanda:
@@ -194,7 +259,7 @@ with tab2:
             max_value=2.0,
             value=1.0,
             step=0.1,
-            help="1.0 = demanda actual, 1.5 = +50% de arribos"
+            help="1.0 = actual, 1.5 = +50%"
         )
     
     with col_leak:
@@ -204,7 +269,7 @@ with tab2:
             max_value=20.0,
             value=0.6,
             step=0.5,
-            help="% de bicis que no retornan al sistema"
+            help="% bicis que no retornan"
         )
     
     col_hz, col_reps = st.columns(2)
@@ -224,13 +289,11 @@ with tab2:
             index=1
         )
     
-    # BOTÓN GRANDE
     st.markdown("---")
     boton_simular = st.button("🚀 EJECUTAR SIMULACIÓN", type="primary", use_container_width=True)
     
-    # RESULTADOS
     if boton_simular:
-        with st.spinner("⏳ Simulando... (esto puede tomar 10-30 segundos)"):
+        with st.spinner("⏳ Simulando..."):
             resultados = simular_escenario(
                 s0=s0_usuario,
                 factor_demanda=factor_demanda,
@@ -243,7 +306,6 @@ with tab2:
         
         st.success("✅ Simulación completada")
         
-        # MÉTRICAS EN CARDS
         pct_medio = resultados['pct_rechazos_media']
         ic_low, ic_up = resultados['pct_rechazos_ic95']
         cumple = ic_up < 5.0
@@ -251,37 +313,35 @@ with tab2:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            color_rechazo = "#28a745" if cumple else "#dc3545"
+            color_rechazo = "#2e7d32" if cumple else "#c62828"
             st.markdown(f"""
             <div class="resultado-box">
-            <h3 style="color: #555;">% Rechazos Promedio</h3>
+            <h3>% Rechazos Promedio</h3>
             <h1 style="color: {color_rechazo};">{pct_medio:.2f}%</h1>
-            <p style="color: #777;">IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
+            <p>IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
             </div>
             """, unsafe_allow_html=True)
         
         with col2:
             st.markdown(f"""
             <div class="resultado-box">
-            <h3 style="color: #555;">Stock Promedio</h3>
-            <h1 style="color: #0077b6;">{resultados['stock_promedio']:.1f}</h1>
-            <p style="color: #777;">Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
+            <h3>Stock Promedio</h3>
+            <h1 style="color: #01579b;">{resultados['stock_promedio']:.1f}</h1>
+            <p>Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
             </div>
             """, unsafe_allow_html=True)
         
         with col3:
             estado = "✅ CUMPLE" if cumple else "❌ NO CUMPLE"
-            color = "#28a745" if cumple else "#dc3545"
+            color = "#2e7d32" if cumple else "#c62828"
             st.markdown(f"""
             <div class="resultado-box">
-            <h3 style="color: #555;">Criterio (IC95 < 5%)</h3>
+            <h3>Criterio (IC95 < 5%)</h3>
             <h1 style="color: {color};">{estado}</h1>
-            <p style="color: #777;">Nivel de servicio: {100-ic_up:.1f}%</p>
+            <p>Nivel de servicio: {100-ic_up:.1f}%</p>
             </div>
             """, unsafe_allow_html=True)
-
         
-        # GRÁFICO DE DISTRIBUCIÓN
         st.markdown("---")
         st.subheader("Distribución Empírica de Rechazos (Monte Carlo)")
         
@@ -290,7 +350,7 @@ with tab2:
             x=resultados['distribucion_rechazos'],
             nbinsx=40,
             name='Frecuencia',
-            marker_color='rgba(0, 119, 182, 0.6)',  # ← Azul del logo
+            marker_color='rgba(0, 119, 182, 0.6)',
             marker_line_color='white',
             marker_line_width=1
         )
@@ -302,21 +362,19 @@ with tab2:
             xaxis_title="% Rechazos por Réplica",
             yaxis_title="Frecuencia",
             height=450,
-            template='plotly_white',  # ← TEMA CLARO
+            template='plotly_white',
             hovermode='x'
         )
-
         st.plotly_chart(fig, use_container_width=True)
         
-        # INTERPRETACIÓN AUTOMÁTICA
         st.markdown("### 💬 Interpretación")
         if cumple:
-            st.success(f"✅ **Escenario viable.** Con S₀={s0_usuario} bicis y los parámetros seleccionados, el sistema garantiza <5% de rechazos con 95% de confianza. El nivel de servicio esperado es del {100-ic_up:.1f}%.")
+            st.success(f"✅ **Escenario viable.** Con S₀={s0_usuario} bicis, el sistema garantiza <5% rechazos con 95% confianza. Nivel de servicio: {100-ic_up:.1f}%.")
         else:
-            st.error(f"❌ **Escenario insuficiente.** El IC95 superior ({ic_up:.1f}%) supera el umbral del 5%. Se recomienda aumentar S₀ o reducir el factor de demanda. Nivel de servicio: {100-ic_up:.1f}%.")
+            st.error(f"❌ **Insuficiente.** IC95 superior ({ic_up:.1f}%) > 5%. Aumentar S₀ o reducir demanda. Nivel de servicio: {100-ic_up:.1f}%.")
     
     else:
-        st.info("👆 Ajustá los parámetros arriba y presioná **EJECUTAR SIMULACIÓN**")
+        st.info("👆 Ajustá los parámetros y presioná **EJECUTAR SIMULACIÓN**")
 
 # ─────────────────────────────────────────────────────────
 # TAB 3: ANÁLISIS EMPÍRICO
@@ -332,20 +390,19 @@ with tab3:
         y=df_resultados['pct_medio'],
         mode='lines+markers',
         name='% Rechazos',
-        line=dict(color='cyan', width=3),
+        line=dict(color='#0077b6', width=3),
         marker=dict(size=8)
     )
     fig.add_hline(y=5, line_dash="dash", line_color="red",
                  annotation_text="Umbral 5%", annotation_position="right")
     fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
-                 line_color="lime", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
+                 line_color="green", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
     fig.update_layout(
         xaxis_title="Stock Inicial (S₀)",
         yaxis_title="% Rechazos Medio",
         height=500,
-        template='plotly_white'  # ← TEMA CLARO
+        template='plotly_white'
     )
-
     st.plotly_chart(fig, use_container_width=True)
     
     st.subheader("Metadata del Análisis")
@@ -360,6 +417,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
