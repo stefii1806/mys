@@ -27,7 +27,7 @@ with col_titulo:
 
 st.markdown("---")
 
-        col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
         
         with col1:
             color_rechazo = "#2e7d32" if cumple else "#c62828"  # Verde oscuro / Rojo oscuro
@@ -360,6 +360,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
