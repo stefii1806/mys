@@ -602,8 +602,12 @@ with tab3:
         xaxis_title="Stock Inicial (S₀)",
         yaxis_title="% Rechazos Medio",
         height=500,
-        template='plotly_white'
+        template='plotly_white',
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff',
+        font=dict(color='#1a1a1a')
     )
+
 
     st.plotly_chart(fig, use_container_width=True)
     
@@ -617,6 +621,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
