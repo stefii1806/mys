@@ -560,12 +560,24 @@ with tab2:
         fig.add_vline(x=pct_medio, line_dash="dot", line_color="green", line_width=2,
                      annotation_text=f"Media: {pct_medio:.1f}%", annotation_position="top left")
         fig.update_layout(
-            xaxis_title="% Rechazos por réplica",
-            yaxis_title="Frecuencia",
-            height=450,
-            template='plotly_white',
-            hovermode='x'
-        )
+        xaxis_title="% Rechazos por Réplica",
+        yaxis_title="Frecuencia",
+        height=450,
+        template='plotly_white',
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff',
+        font=dict(color='#424242'),
+        xaxis=dict(
+            title_font=dict(color='#424242'),
+            tickfont=dict(color='#424242')
+        ),
+        yaxis=dict(
+            title_font=dict(color='#424242'),
+            tickfont=dict(color='#424242')
+        ),
+        hovermode='x'
+    )
+
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown("### 💬 Interpretación")
@@ -630,6 +642,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
