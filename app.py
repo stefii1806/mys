@@ -17,17 +17,27 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado - TEMA CLARO
+# CSS personalizado - TEMA CLARO MEJORADO
 st.markdown("""
     <style>
+    /* Fuente global */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    /* Fondo blanco */
     .stApp {
         background-color: #ffffff;
     }
     
+    /* Texto general oscuro */
     .stMarkdown, p, span, div {
         color: #1a1a1a !important;
     }
     
+    /* Cards de resultados */
     .resultado-box {
         background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
         padding: 25px;
@@ -52,16 +62,22 @@ st.markdown("""
         font-size: 14px;
     }
     
+    /* Títulos */
     h1, h2, h3 {
         color: #0077b6 !important;
+        font-family: 'Inter', sans-serif !important;
     }
     
+    /* Tabs - FONDO SUTIL */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 10px;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background-color: #e3f2fd;
+        background-color: #e8e8e8;
         border-radius: 8px 8px 0 0;
         padding: 12px 24px;
         color: #0077b6;
@@ -73,6 +89,32 @@ st.markdown("""
         color: white !important;
     }
     
+    /* Tabla - FONDO CLARO */
+    .stDataFrame {
+        background-color: #fafafa !important;
+    }
+    
+    [data-testid="stDataFrame"] {
+        background-color: #fafafa;
+    }
+    
+    /* Filas de tabla alternadas */
+    [data-testid="stDataFrame"] tr:nth-child(even) {
+        background-color: #f0f0f0;
+    }
+    
+    [data-testid="stDataFrame"] tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+    
+    /* Header de tabla */
+    [data-testid="stDataFrame"] thead tr {
+        background-color: #e3f2fd !important;
+        color: #0d47a1 !important;
+        font-weight: 600;
+    }
+    
+    /* Botón principal */
     .stButton>button {
         background: linear-gradient(135deg, #0096c7 0%, #0077b6 100%);
         color: white !important;
@@ -81,6 +123,7 @@ st.markdown("""
         border-radius: 10px;
         padding: 14px 28px;
         font-size: 18px;
+        font-family: 'Inter', sans-serif;
         box-shadow: 0 4px 8px rgba(0,119,182,0.3);
         transition: all 0.3s;
     }
@@ -91,28 +134,35 @@ st.markdown("""
         box-shadow: 0 6px 12px rgba(0,119,182,0.4);
     }
     
+    /* Métricas */
     [data-testid="stMetricValue"] {
         color: #0077b6 !important;
         font-size: 28px;
         font-weight: 700;
+        font-family: 'Inter', sans-serif;
     }
     
     [data-testid="stMetricLabel"] {
         color: #424242 !important;
         font-weight: 600;
+        font-family: 'Inter', sans-serif;
     }
     
+    /* Info boxes */
     .stAlert {
         background-color: #e3f2fd;
         border-left: 4px solid #0077b6;
     }
     
+    /* Selectbox, sliders, inputs */
     .stSelectbox label, .stSlider label, .stNumberInput label {
         color: #0d47a1 !important;
         font-weight: 600;
+        font-family: 'Inter', sans-serif;
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 # ============================================
 # HEADER CON LOGO
@@ -417,6 +467,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
