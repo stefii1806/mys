@@ -20,7 +20,7 @@ st.set_page_config(
 # Logo en header
 col_logo, col_titulo = st.columns([1, 4])
 with col_logo:
-    st.image("mbtb.jpg", width=120)
+    st.image("mbtb.png", width=120)
 with col_titulo:
     st.title("Sistema Mi Bici Tu Bici - Rosario")
     st.markdown("**Distrito Centro** | Simulación de Eventos Discretos")
@@ -342,5 +342,6 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
