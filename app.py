@@ -27,68 +27,37 @@ with col_titulo:
 
 st.markdown("---")
 
-# CSS personalizado - TEMA CLARO
-st.markdown("""
-    <style>
-    /* Fondo general blanco */
-    .stApp {
-        background-color: #ffffff;
-    }
-    
-    /* Cards de resultados con borde celeste */
-    .resultado-box {
-        background-color: #f8fcff;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #00b4d8;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    /* Título principal */
-    h1 {
-        color: #0077b6;
-    }
-    
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background-color: #e3f2fd;
-        border-radius: 8px 8px 0 0;
-        padding: 10px 20px;
-        color: #0077b6;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background-color: #0077b6;
-        color: white;
-    }
-    
-    /* Botón principal */
-    .stButton>button {
-        background-color: #00b4d8;
-        color: white;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-size: 16px;
-    }
-    
-    .stButton>button:hover {
-        background-color: #0096c7;
-        border: none;
-    }
-    
-    /* Métricas */
-    [data-testid="stMetricValue"] {
-        color: #0077b6;
-        font-size: 24px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            color_rechazo = "#2e7d32" if cumple else "#c62828"  # Verde oscuro / Rojo oscuro
+            st.markdown(f"""
+            <div class="resultado-box">
+            <h3>% Rechazos Promedio</h3>
+            <h1 style="color: {color_rechazo};">{pct_medio:.2f}%</h1>
+            <p>IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class="resultado-box">
+            <h3>Stock Promedio</h3>
+            <h1 style="color: #01579b;">{resultados['stock_promedio']:.1f}</h1>
+            <p>Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            estado = "✅ CUMPLE" if cumple else "❌ NO CUMPLE"
+            color = "#2e7d32" if cumple else "#c62828"
+            st.markdown(f"""
+            <div class="resultado-box">
+            <h3>Criterio (IC95 < 5%)</h3>
+            <h1 style="color: {color};">{estado}</h1>
+            <p>Nivel de servicio: {100-ic_up:.1f}%</p>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # ============================================
@@ -391,6 +360,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
