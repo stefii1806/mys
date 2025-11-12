@@ -272,7 +272,7 @@ with col_logo:
     st.image("mbtb.png", width=80)
 with col_titulo:
     st.markdown("# Sistema Mi Bici, Tu Bici - Rosario")
-    st.markdown("**Distrito Centro** | Simulación de eventos discretos (DES) + Monte Carlo")
+    st.markdown("**Distrito Centro** | Simulación de eventos discretos (DES) + Montecarlo")
 
 st.markdown("---")
 
@@ -485,7 +485,7 @@ with tab2:
     
     with col_reps:
         n_replicas = st.selectbox(
-            "🔁 Réplicas Monte Carlo",
+            "🔁 Réplicas Montecarlo",
             options=[100, 300, 500, 1000],
             index=1
         )
@@ -544,7 +544,7 @@ with tab2:
             """, unsafe_allow_html=True)
         
         st.markdown("---")
-        st.subheader("Distribución empírica de rechazos (Monte Carlo)")
+        st.subheader("Distribución empírica de rechazos (Montecarlo)")
         
         fig = go.Figure()
         fig.add_histogram(
@@ -583,7 +583,7 @@ with tab2:
 
 with tab3:
     st.header("Resultados del análisis empírico")
-    st.subheader("Curva de Sensibilidad: S₀ vs % Rechazos")
+    st.subheader("Curva de sensibilidad: S₀ vs % rechazos")
     
     fig = go.Figure()
     fig.add_scatter(
@@ -604,6 +604,7 @@ with tab3:
         height=500,
         template='plotly_white'
     )
+
     st.plotly_chart(fig, use_container_width=True)
     
     st.subheader("Metadata del análisis")
@@ -611,13 +612,12 @@ with tab3:
     with col1:
         st.metric("Observaciones", f"{metadata['n_observaciones']:,}")
     with col2:
-        st.metric("Período", f"{metadata['periodo_inicio']} / {metadata['periodo_fin']}")
-    with col3:
         st.metric("Evaluaciones DES", metadata['n_evaluaciones'])
 
 # FOOTER
 st.markdown("---")
-st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda Binaria")
+st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
