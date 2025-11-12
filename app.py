@@ -14,10 +14,206 @@ from pathlib import Path
 st.set_page_config(
     page_title="Mi Bici Tu Bici - Simulador",
     page_icon="🚴",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
+# FORZAR TEMA CLARO
+st.markdown("""
+    <style>
+    [data-testid="stAppViewContainer"] {
+        background-color: #ffffff !important;
+    }
+    
+    [data-testid="stHeader"] {
+        background-color: #ffffff !important;
+    }
+    
+    .main {
+        background-color: #ffffff !important;
+    }
+    
+    .stApp {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
+# CSS personalizado - VERSIÓN FINAL
+st.markdown("""
+    <style>
+    /* Fuente global */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    /* Fondo blanco */
+    .stApp {
+        background-color: #ffffff;
+    }
+    
+    /* Texto general oscuro */
+    .stMarkdown, p, span, div {
+        color: #1a1a1a !important;
+    }
+    
+    /* Cards de resultados */
+    .resultado-box {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        padding: 25px;
+        border-radius: 12px;
+        border-left: 6px solid #0077b6;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    
+    .resultado-box h3 {
+        color: #0d47a1 !important;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .resultado-box h1 {
+        font-weight: 700;
+        margin: 10px 0;
+    }
+    
+    .resultado-box p {
+        color: #424242 !important;
+        font-size: 14px;
+    }
+    
+    /* Títulos */
+    h1, h2, h3 {
+        color: #0077b6 !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: #e8e8e8;
+        border-radius: 8px 8px 0 0;
+        padding: 12px 24px;
+        color: #0077b6;
+        font-weight: 500;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #e3f2fd !important;
+        color: #0d47a1 !important;
+        font-weight: 600;
+    }
+    
+    /* Fondo para el contenido de cada tab */
+    .stTabs [data-baseweb="tab-panel"] {
+        background-color: #f8f9fa !important;
+        padding: 30px !important;
+        border-radius: 0 12px 12px 12px !important;
+        margin-top: -1px !important;
+    }
+    
+    /* Tabla personalizada */
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Inter', sans-serif;
+        background-color: white !important;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .custom-table thead {
+        background-color: #e3f2fd !important;
+    }
+    
+    .custom-table thead tr {
+        background-color: #e3f2fd !important;
+    }
+    
+    .custom-table thead th {
+        background-color: #e3f2fd !important;
+        color: #0d47a1 !important;
+        text-align: left;
+        font-weight: 600;
+        padding: 14px 16px;
+        border: 1px solid #90caf9;
+    }
+    
+    .custom-table tbody td {
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        color: #1a1a1a;
+    }
+    
+    .custom-table tbody tr:nth-of-type(even) {
+        background-color: #f9f9f9;
+    }
+    
+    .custom-table tbody tr:nth-of-type(odd) {
+        background-color: #ffffff;
+    }
+    
+    .custom-table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+    
+    /* Botón principal */
+    .stButton>button {
+        background: linear-gradient(135deg, #0096c7 0%, #0077b6 100%);
+        color: white !important;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 28px;
+        font-size: 18px;
+        font-family: 'Inter', sans-serif;
+        box-shadow: 0 4px 8px rgba(0,119,182,0.3);
+        transition: all 0.3s;
+    }
+    
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #0077b6 0%, #005f8c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,119,182,0.4);
+    }
+    
+    /* Métricas */
+    [data-testid="stMetricValue"] {
+        color: #0077b6 !important;
+        font-size: 28px;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #424242 !important;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Info boxes */
+    .stAlert {
+        background-color: #e3f2fd;
+        border-left: 4px solid #0077b6;
+    }
+    
+    /* Selectbox, sliders, inputs */
+    .stSelectbox label, .stSlider label, .stNumberInput label {
+        color: #0d47a1 !important;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # ============================================
 # HEADER CON LOGO
@@ -118,10 +314,8 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "�
 # ─────────────────────────────────────────────────────────
 
 with tab1:
-       
     st.header("Resumen del Sistema")
     
-
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("🚴 λ (arribos/h)", f"{parametros['lambda_global']:.2f}")
@@ -132,7 +326,7 @@ with tab1:
     with col4:
         st.metric("✅ S₀ óptimo", f"{parametros['s0_recomendado']} bicis")
     
-        st.markdown("---")
+    st.markdown("---")
     st.subheader("Comparación de Escenarios Analizados")
     
     # Convertir a HTML personalizado
@@ -189,8 +383,6 @@ with tab1:
     st.markdown(html_table, unsafe_allow_html=True)
     
     st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
-    
-    
 
 # ─────────────────────────────────────────────────────────
 # TAB 2: SIMULADOR
@@ -377,22 +569,7 @@ with tab3:
 
 # FOOTER
 st.markdown("---")
-st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
 
 
 
