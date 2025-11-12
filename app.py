@@ -299,7 +299,32 @@ with tab1:
     
     st.markdown("---")
     st.subheader("Comparación de Escenarios Analizados")
-    st.dataframe(df_resumen, use_container_width=True, hide_index=True)
+    # Aplicar estilos directamente al DataFrame
+styled_df = df_resumen.style.set_properties(**{
+    'background-color': '#ffffff',
+    'color': '#1a1a1a',
+    'border-color': '#e0e0e0'
+}).set_table_styles([
+    {'selector': 'thead th', 'props': [
+        ('background-color', '#e3f2fd'),
+        ('color', '#0d47a1'),
+        ('font-weight', '600'),
+        ('border', '1px solid #90caf9')
+    ]},
+    {'selector': 'tbody tr:nth-child(even)', 'props': [
+        ('background-color', '#f5f5f5')
+    ]},
+    {'selector': 'tbody tr:nth-child(odd)', 'props': [
+        ('background-color', '#ffffff')
+    ]},
+    {'selector': 'td', 'props': [
+        ('border', '1px solid #e0e0e0'),
+        ('padding', '8px')
+    ]}
+])
+
+st.dataframe(styled_df, use_container_width=True, hide_index=True)
+
     
     st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
     
@@ -491,6 +516,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
