@@ -446,7 +446,7 @@ with tab2:
     with col_s0:
         s0_usuario = st.number_input(
             "📦 Stock Inicial (S₀)",
-            min_value=0,
+            min_value=1,
             max_value=150,
             value=67,
             step=5,
@@ -469,7 +469,7 @@ with tab2:
             min_value=0.0,
             max_value=20.0,
             value=0.6,
-            step=0.5,
+            step=0.1,
             help="% bicis que no retornan"
         )
     
@@ -630,6 +630,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
