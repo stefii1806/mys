@@ -268,8 +268,7 @@ st.markdown("""
 # ============================================
 
 col_logo, col_titulo = st.columns([0.5, 5])
-with col_logo:
-    st.image("mbtb.png", width=80)
+
 with col_titulo:
     st.markdown("# Sistema Mi Bici, Tu Bici - Rosario")
     st.markdown("**Distrito Centro** | Simulación de eventos discretos (DES) + Montecarlo")
@@ -649,6 +648,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
