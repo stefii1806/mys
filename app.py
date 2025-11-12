@@ -85,9 +85,11 @@ st.markdown("""
     }
     
     .stTabs [aria-selected="true"] {
-        background-color: #0077b6;
-        color: white !important;
+        background-color: #e3f2fd !important;
+        color: #0d47a1 !important;
+        font-weight: 600;
     }
+
     
     /* FORZAR TABLA CON FONDO CLARO */
     div[data-testid="stDataFrame"] {
@@ -545,6 +547,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
