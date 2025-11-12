@@ -1,0 +1,4 @@
+Escenario,% Rechazos,IC95,Stock Prom.,P(stock=0),Cumple
+Cota Global (S₀=74),0.00%,"[0.00%, 0.00%]",73.3,0.0%,✓
+⭐ RECOMENDADO (S₀=67),0.00%,"[0.00%, 0.00%]",66.3,0.0%,✓
+Conservador +10% (S₀=74),0.00%,"[0.00%, 0.00%]",73.3,0.0%,✓

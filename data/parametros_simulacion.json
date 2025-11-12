@@ -1,0 +1,19 @@
+{
+  "lambda_global": 2.3065068827174544,
+  "cv_interarribo": 1.9558294135708454,
+  "duracion_media_min": 19.82174120643005,
+  "duracion_std_min": 13.224329684287506,
+  "cv_duracion": 0.6671628666001156,
+  "leak_mediana": 0.0060790273556231,
+  "leak_p95": 0.06766917293233082,
+  "balance_neto": -72,
+  "cota_global": 74,
+  "cota_semanal": 44,
+  "s0_recomendado": 67,
+  "horizonte_dias_default": 7,
+  "umbral_servicio_pct": 5.0,
+  "n_replicas_default": 500,
+  "fecha_analisis": "2025-11-12",
+  "metodo_optimizacion": "b\u00fasqueda_binaria",
+  "evaluaciones_realizadas": 15
+}

@@ -1,0 +1,11 @@
+{
+  "n_observaciones": 297375,
+  "n_retiros_dc": 6747,
+  "n_devoluciones_dc": 6675,
+  "periodo_inicio": "-",
+  "periodo_fin": "9/4/2024 23:59",
+  "n_evaluaciones": 15,
+  "replicas_por_evaluacion": 500,
+  "tiempo_simulado_dias": 7,
+  "metodo": "b\u00fasqueda_binaria_con_validaci\u00f3n"
+}
