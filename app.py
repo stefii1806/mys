@@ -279,7 +279,7 @@ with tab2:
         ic_low, ic_up = resultados['pct_rechazos_ic95']
         cumple = ic_up < 5.0
         
-                col1, col2, col3 = st.columns(3)
+        col1, col2, col3 = st.columns(3)
         
         with col1:
             color_rechazo = "#28a745" if cumple else "#dc3545"
@@ -391,6 +391,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
