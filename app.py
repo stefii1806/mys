@@ -370,7 +370,7 @@ with tab3:
                  annotation_text="Umbral 5%", annotation_position="right")
     fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
                  line_color="lime", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
-     fig.update_layout(
+    fig.update_layout(
         xaxis_title="Stock Inicial (S₀)",
         yaxis_title="% Rechazos Medio",
         height=500,
@@ -391,6 +391,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
