@@ -17,7 +17,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# CSS personalizado - TEMA CLARO MEJORADO
+# CSS personalizado - VERSIÓN CORREGIDA
 st.markdown("""
     <style>
     /* Fuente global */
@@ -89,29 +89,41 @@ st.markdown("""
         color: white !important;
     }
     
-    /* Tabla - FONDO CLARO */
-    .stDataFrame {
+    /* FORZAR TABLA CON FONDO CLARO */
+    div[data-testid="stDataFrame"] {
         background-color: #fafafa !important;
     }
     
-    [data-testid="stDataFrame"] {
-        background-color: #fafafa;
+    div[data-testid="stDataFrame"] > div {
+        background-color: #fafafa !important;
     }
     
-    /* Filas de tabla alternadas */
-    [data-testid="stDataFrame"] tr:nth-child(even) {
-        background-color: #f0f0f0;
+    /* Forzar tema claro en tabla */
+    div[data-testid="stDataFrame"] table {
+        background-color: #ffffff !important;
     }
     
-    [data-testid="stDataFrame"] tr:nth-child(odd) {
-        background-color: #ffffff;
+    div[data-testid="stDataFrame"] thead {
+        background-color: #e3f2fd !important;
     }
     
-    /* Header de tabla */
-    [data-testid="stDataFrame"] thead tr {
+    div[data-testid="stDataFrame"] thead th {
         background-color: #e3f2fd !important;
         color: #0d47a1 !important;
         font-weight: 600;
+    }
+    
+    div[data-testid="stDataFrame"] tbody tr:nth-child(even) {
+        background-color: #f5f5f5 !important;
+    }
+    
+    div[data-testid="stDataFrame"] tbody tr:nth-child(odd) {
+        background-color: #ffffff !important;
+    }
+    
+    div[data-testid="stDataFrame"] tbody td {
+        color: #1a1a1a !important;
+        background-color: inherit;
     }
     
     /* Botón principal */
@@ -162,7 +174,6 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
-
 
 # ============================================
 # HEADER CON LOGO
@@ -263,6 +274,17 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "�
 # ─────────────────────────────────────────────────────────
 
 with tab1:
+    st.markdown("""
+        <style>
+        .dashboard-container {
+            background-color: #f5f5f5;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        </style>
+        <div class="dashboard-container">
+        """, unsafe_allow_html=True)
+    
     st.header("Resumen del Sistema")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -280,6 +302,8 @@ with tab1:
     st.dataframe(df_resumen, use_container_width=True, hide_index=True)
     
     st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────
 # TAB 2: SIMULADOR
@@ -466,7 +490,8 @@ with tab3:
 
 # FOOTER
 st.markdown("---")
-st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
