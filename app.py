@@ -210,6 +210,56 @@ st.markdown("""
         font-weight: 600;
         font-family: 'Segoe UI', sans-serif;
     }
+
+        /* Sliders - Azul oscuro */
+    .stSlider > div > div > div > div {
+        background-color: #0077b6 !important;
+    }
+    
+    .stSlider [role="slider"] {
+        background-color: #0077b6 !important;
+    }
+    
+    /* Desplegables - Fondo claro */
+    .stSelectbox > div > div {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    
+    .stSelectbox select {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    
+    /* Dropdown menu */
+    [data-baseweb="popover"] {
+        background-color: #ffffff !important;
+    }
+    
+    [data-baseweb="menu"] {
+        background-color: #ffffff !important;
+    }
+    
+    [role="option"] {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    
+    [role="option"]:hover {
+        background-color: #e3f2fd !important;
+    }
+    
+    /* Number input - Fondo claro */
+    .stNumberInput input {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    
+    .stNumberInput button {
+        background-color: #f0f0f0 !important;
+        color: #1a1a1a !important;
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
@@ -221,8 +271,8 @@ col_logo, col_titulo = st.columns([0.5, 5])
 with col_logo:
     st.image("mbtb.png", width=80)
 with col_titulo:
-    st.markdown("# Sistema Mi Bici Tu Bici - Rosario")
-    st.markdown("**Distrito Centro** | Simulación de Eventos Discretos + Monte Carlo")
+    st.markdown("# Sistema Mi Bici, Tu Bici - Rosario")
+    st.markdown("**Distrito Centro** | Simulación de eventos discretos (DES) + Monte Carlo")
 
 st.markdown("---")
 
@@ -305,14 +355,14 @@ def simular_escenario(s0, factor_demanda, leak_pct, horizonte_dias, n_reps,
 # TABS
 # ============================================
 
-tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "📈 Resultados Empíricos"])
+tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador interactivo", "📈 Resultados empíricos"])
 
 # ─────────────────────────────────────────────────────────
 # TAB 1: DASHBOARD
 # ─────────────────────────────────────────────────────────
 
 with tab1:
-    st.header("Resumen del Sistema")
+    st.header("Resumen del sistema")
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -325,7 +375,7 @@ with tab1:
         st.metric("✅ S₀ óptimo", f"{parametros['s0_recomendado']} bicis")
     
     st.markdown("---")
-    st.subheader("Comparación de Escenarios Analizados")
+    st.subheader("Comparación de escenarios analizados")
     
     # Convertir a HTML personalizado
     html_table = df_resumen.to_html(index=False, escape=False, classes='custom-table')
@@ -387,9 +437,9 @@ with tab1:
 # ─────────────────────────────────────────────────────────
 
 with tab2:
-    st.header("Simulador de Escenarios")
+    st.header("Simulador de escenarios")
     
-    st.markdown("### ⚙️ Configuración del Escenario")
+    st.markdown("### ⚙️ Configuración del escenario")
     
     col_s0, col_demanda, col_leak = st.columns(3)
     
@@ -405,7 +455,7 @@ with tab2:
     
     with col_demanda:
         factor_demanda = st.slider(
-            "📈 Factor Demanda (m)",
+            "📈 Factor demanda (m)",
             min_value=0.5,
             max_value=2.0,
             value=1.0,
@@ -427,7 +477,7 @@ with tab2:
     
     with col_hz:
         horizonte_dias = st.selectbox(
-            "🕐 Horizonte Temporal",
+            "🕐 Horizonte temporal",
             options=[7, 14, 30],
             index=0,
             format_func=lambda x: f"{x} días"
@@ -494,7 +544,7 @@ with tab2:
             """, unsafe_allow_html=True)
         
         st.markdown("---")
-        st.subheader("Distribución Empírica de Rechazos (Monte Carlo)")
+        st.subheader("Distribución empírica de rechazos (Monte Carlo)")
         
         fig = go.Figure()
         fig.add_histogram(
@@ -510,7 +560,7 @@ with tab2:
         fig.add_vline(x=pct_medio, line_dash="dot", line_color="green", line_width=2,
                      annotation_text=f"Media: {pct_medio:.1f}%", annotation_position="top left")
         fig.update_layout(
-            xaxis_title="% Rechazos por Réplica",
+            xaxis_title="% Rechazos por réplica",
             yaxis_title="Frecuencia",
             height=450,
             template='plotly_white',
@@ -520,19 +570,19 @@ with tab2:
         
         st.markdown("### 💬 Interpretación")
         if cumple:
-            st.success(f"✅ **Escenario viable.** Con S₀={s0_usuario} bicis, el sistema garantiza <5% rechazos con 95% confianza. Nivel de servicio: {100-ic_up:.1f}%.")
+            st.success(f"✅ **Escenario viable.** Con S₀={s0_usuario} bicis, el sistema garantiza <5 % rechazos con 95 % confianza. Nivel de servicio: {100-ic_up:.1f}%.")
         else:
-            st.error(f"❌ **Insuficiente.** IC95 superior ({ic_up:.1f}%) > 5%. Aumentar S₀ o reducir demanda. Nivel de servicio: {100-ic_up:.1f}%.")
+            st.error(f"❌ **Insuficiente.** IC95 superior ({ic_up:.1f}%) > 5 %. Aumentar S₀ o reducir demanda. Nivel de servicio: {100-ic_up:.1f}%.")
     
     else:
-        st.info("👆 Ajustá los parámetros y presioná **EJECUTAR SIMULACIÓN**")
+        st.info("👆 Ajustar los parámetros y presionar **EJECUTAR SIMULACIÓN**")
 
 # ─────────────────────────────────────────────────────────
 # TAB 3: ANÁLISIS EMPÍRICO
 # ─────────────────────────────────────────────────────────
 
 with tab3:
-    st.header("Resultados del Análisis Empírico")
+    st.header("Resultados del análisis empírico")
     st.subheader("Curva de Sensibilidad: S₀ vs % Rechazos")
     
     fig = go.Figure()
@@ -556,7 +606,7 @@ with tab3:
     )
     st.plotly_chart(fig, use_container_width=True)
     
-    st.subheader("Metadata del Análisis")
+    st.subheader("Metadata del análisis")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("Observaciones", f"{metadata['n_observaciones']:,}")
@@ -567,7 +617,8 @@ with tab3:
 
 # FOOTER
 st.markdown("---")
-st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
