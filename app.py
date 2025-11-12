@@ -276,7 +276,7 @@ tab1, tab2, tab3 = st.tabs(["📊 Dashboard", "🎮 Simulador Interactivo", "�
 with tab1:
        
     st.header("Resumen del Sistema")
-        st.markdown("""
+    st.markdown("""
         <style>
         .dashboard-container {
             background-color: #e3f2fd;
@@ -545,6 +545,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
