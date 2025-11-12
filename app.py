@@ -297,38 +297,65 @@ with tab1:
     with col4:
         st.metric("✅ S₀ óptimo", f"{parametros['s0_recomendado']} bicis")
     
-    st.markdown("---")
+        st.markdown("---")
     st.subheader("Comparación de Escenarios Analizados")
-    # Aplicar estilos directamente al DataFrame
-styled_df = df_resumen.style.set_properties(**{
-    'background-color': '#ffffff',
-    'color': '#1a1a1a',
-    'border-color': '#e0e0e0'
-}).set_table_styles([
-    {'selector': 'thead th', 'props': [
-        ('background-color', '#e3f2fd'),
-        ('color', '#0d47a1'),
-        ('font-weight', '600'),
-        ('border', '1px solid #90caf9')
-    ]},
-    {'selector': 'tbody tr:nth-child(even)', 'props': [
-        ('background-color', '#f5f5f5')
-    ]},
-    {'selector': 'tbody tr:nth-child(odd)', 'props': [
-        ('background-color', '#ffffff')
-    ]},
-    {'selector': 'td', 'props': [
-        ('border', '1px solid #e0e0e0'),
-        ('padding', '8px')
-    ]}
-])
-
-st.dataframe(styled_df, use_container_width=True, hide_index=True)
-
     
-st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
+    # Convertir a HTML personalizado
+    html_table = df_resumen.to_html(index=False, escape=False, classes='custom-table')
     
-st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Inter', sans-serif;
+        background-color: white;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .custom-table thead {
+        background-color: #e3f2fd !important;
+    }
+    
+    .custom-table thead tr {
+        background-color: #e3f2fd !important;
+    }
+    
+    .custom-table thead th {
+        background-color: #e3f2fd !important;
+        color: #0d47a1 !important;
+        text-align: left;
+        font-weight: 600;
+        padding: 14px 16px;
+        border: 1px solid #90caf9;
+    }
+    
+    .custom-table tbody td {
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        color: #1a1a1a;
+    }
+    
+    .custom-table tbody tr:nth-of-type(even) {
+        background-color: #f9f9f9;
+    }
+    
+    .custom-table tbody tr:nth-of-type(odd) {
+        background-color: #ffffff;
+    }
+    
+    .custom-table tbody tr:hover {
+        background-color: #e8f4f8;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    st.markdown(html_table, unsafe_allow_html=True)
+    
+    st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────────────────
 # TAB 2: SIMULADOR
@@ -516,6 +543,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
