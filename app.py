@@ -569,14 +569,17 @@ with tab2:
         font=dict(color='#424242'),
         xaxis=dict(
             title_font=dict(color='#424242'),
-            tickfont=dict(color='#424242')
+            tickfont=dict(color='#424242'),
+            gridcolor='#e0e0e0'  # ← Gris claro
         ),
         yaxis=dict(
             title_font=dict(color='#424242'),
-            tickfont=dict(color='#424242')
+            tickfont=dict(color='#424242'),
+            gridcolor='#e0e0e0'  # ← Gris claro
         ),
         hovermode='x'
     )
+
 
         st.plotly_chart(fig, use_container_width=True)
         
@@ -646,6 +649,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
