@@ -611,22 +611,26 @@ with tab3:
     fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
                  line_color="green", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
     fig.update_layout(
-        xaxis_title="Stock Inicial (S₀)",
-        yaxis_title="% Rechazos Medio",
-        height=500,
+        xaxis_title="% Rechazos por Réplica",
+        yaxis_title="Frecuencia",
+        height=450,
         template='plotly_white',
         paper_bgcolor='#ffffff',
         plot_bgcolor='#ffffff',
-        font=dict(color='#424242'),  # ← Gris oscuro
+        font=dict(color='#424242'),
         xaxis=dict(
             title_font=dict(color='#424242'),
-            tickfont=dict(color='#424242')
+            tickfont=dict(color='#424242'),
+            gridcolor='#e0e0e0'  # ← Gris claro
         ),
         yaxis=dict(
             title_font=dict(color='#424242'),
-            tickfont=dict(color='#424242')
-        )
+            tickfont=dict(color='#424242'),
+            gridcolor='#e0e0e0'  # ← Gris claro
+        ),
+        hovermode='x'
     )
+
 
 
 
@@ -642,6 +646,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
