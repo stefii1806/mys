@@ -43,11 +43,9 @@ st.markdown("""
 # CSS personalizado - VERSIÓN FINAL
 st.markdown("""
     <style>
-    /* Fuente global */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
-    html, body, [class*="css"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    /* Fuente global */    
+    html, body, [class*="css"], * {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif !important;
     }
     
     /* Fondo blanco */
@@ -88,7 +86,7 @@ st.markdown("""
     /* Títulos */
     h1, h2, h3 {
         color: #0077b6 !important;
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Segoe UI', sans-serif !important;
     }
     
     /* Tabs */
@@ -125,7 +123,7 @@ st.markdown("""
     .custom-table {
         width: 100%;
         border-collapse: collapse;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
         background-color: white !important;
         margin: 20px 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -175,7 +173,7 @@ st.markdown("""
         border-radius: 10px;
         padding: 14px 28px;
         font-size: 18px;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
         box-shadow: 0 4px 8px rgba(0,119,182,0.3);
         transition: all 0.3s;
     }
@@ -191,13 +189,13 @@ st.markdown("""
         color: #0077b6 !important;
         font-size: 28px;
         font-weight: 700;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
     }
     
     [data-testid="stMetricLabel"] {
         color: #424242 !important;
         font-weight: 600;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
     }
     
     /* Info boxes */
@@ -210,7 +208,7 @@ st.markdown("""
     .stSelectbox label, .stSlider label, .stNumberInput label {
         color: #0d47a1 !important;
         font-weight: 600;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -337,7 +335,7 @@ with tab1:
     .custom-table {
         width: 100%;
         border-collapse: collapse;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Segoe UI', sans-serif;
         background-color: white;
         margin: 20px 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -570,6 +568,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
