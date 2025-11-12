@@ -27,24 +27,69 @@ with col_titulo:
 
 st.markdown("---")
 
-# CSS personalizado
+# CSS personalizado - TEMA CLARO
 st.markdown("""
     <style>
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
+    /* Fondo general blanco */
+    .stApp {
+        background-color: #ffffff;
     }
+    
+    /* Cards de resultados con borde celeste */
     .resultado-box {
-        background-color: #1e1e1e;
+        background-color: #f8fcff;
         padding: 20px;
         border-radius: 10px;
-        border-left: 5px solid #00d4ff;
+        border-left: 5px solid #00b4d8;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Título principal */
+    h1 {
+        color: #0077b6;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background-color: #e3f2fd;
+        border-radius: 8px 8px 0 0;
+        padding: 10px 20px;
+        color: #0077b6;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #0077b6;
+        color: white;
+    }
+    
+    /* Botón principal */
+    .stButton>button {
+        background-color: #00b4d8;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+    
+    .stButton>button:hover {
+        background-color: #0096c7;
+        border: none;
+    }
+    
+    /* Métricas */
+    [data-testid="stMetricValue"] {
+        color: #0077b6;
+        font-size: 24px;
     }
     </style>
     """, unsafe_allow_html=True)
+
 
 # ============================================
 # CARGAR DATOS
@@ -234,36 +279,38 @@ with tab2:
         ic_low, ic_up = resultados['pct_rechazos_ic95']
         cumple = ic_up < 5.0
         
-        col1, col2, col3 = st.columns(3)
+                col1, col2, col3 = st.columns(3)
         
         with col1:
+            color_rechazo = "#28a745" if cumple else "#dc3545"
             st.markdown(f"""
             <div class="resultado-box">
-            <h3>% Rechazos Promedio</h3>
-            <h1 style="color: {'#00ff00' if cumple else '#ff4444'};">{pct_medio:.2f}%</h1>
-            <p>IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
+            <h3 style="color: #555;">% Rechazos Promedio</h3>
+            <h1 style="color: {color_rechazo};">{pct_medio:.2f}%</h1>
+            <p style="color: #777;">IC95: [{ic_low:.2f}%, {ic_up:.2f}%]</p>
             </div>
             """, unsafe_allow_html=True)
         
         with col2:
             st.markdown(f"""
             <div class="resultado-box">
-            <h3>Stock Promedio</h3>
-            <h1 style="color: #00d4ff;">{resultados['stock_promedio']:.1f}</h1>
-            <p>Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
+            <h3 style="color: #555;">Stock Promedio</h3>
+            <h1 style="color: #0077b6;">{resultados['stock_promedio']:.1f}</h1>
+            <p style="color: #777;">Utilización: {resultados['stock_promedio']/s0_usuario*100:.0f}%</p>
             </div>
             """, unsafe_allow_html=True)
         
         with col3:
             estado = "✅ CUMPLE" if cumple else "❌ NO CUMPLE"
-            color = "#00ff00" if cumple else "#ff4444"
+            color = "#28a745" if cumple else "#dc3545"
             st.markdown(f"""
             <div class="resultado-box">
-            <h3>Criterio (IC95 < 5%)</h3>
+            <h3 style="color: #555;">Criterio (IC95 < 5%)</h3>
             <h1 style="color: {color};">{estado}</h1>
-            <p>Nivel de servicio: {100-ic_up:.1f}%</p>
+            <p style="color: #777;">Nivel de servicio: {100-ic_up:.1f}%</p>
             </div>
             """, unsafe_allow_html=True)
+
         
         # GRÁFICO DE DISTRIBUCIÓN
         st.markdown("---")
@@ -274,7 +321,7 @@ with tab2:
             x=resultados['distribucion_rechazos'],
             nbinsx=40,
             name='Frecuencia',
-            marker_color='rgba(0, 212, 255, 0.7)',
+            marker_color='rgba(0, 119, 182, 0.6)',  # ← Azul del logo
             marker_line_color='white',
             marker_line_width=1
         )
@@ -282,13 +329,14 @@ with tab2:
                      annotation_text="Umbral 5%", annotation_position="top right")
         fig.add_vline(x=pct_medio, line_dash="dot", line_color="green", line_width=2,
                      annotation_text=f"Media: {pct_medio:.1f}%", annotation_position="top left")
-        fig.update_layout(
+              fig.update_layout(
             xaxis_title="% Rechazos por Réplica",
             yaxis_title="Frecuencia",
             height=450,
-            template='plotly_dark',
+            template='plotly_white',  # ← TEMA CLARO
             hovermode='x'
         )
+
         st.plotly_chart(fig, use_container_width=True)
         
         # INTERPRETACIÓN AUTOMÁTICA
@@ -322,12 +370,13 @@ with tab3:
                  annotation_text="Umbral 5%", annotation_position="right")
     fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
                  line_color="lime", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
-    fig.update_layout(
+     fig.update_layout(
         xaxis_title="Stock Inicial (S₀)",
         yaxis_title="% Rechazos Medio",
         height=500,
-        template='plotly_dark'
+        template='plotly_white'  # ← TEMA CLARO
     )
+
     st.plotly_chart(fig, use_container_width=True)
     
     st.subheader("Metadata del Análisis")
@@ -342,6 +391,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefanía Fiorotto | **Curso:** Modelos y Simulación 2025 | **Método:** DES + Bootstrap + Búsqueda Binaria")
+
 
 
 
