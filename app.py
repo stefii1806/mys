@@ -432,6 +432,60 @@ with tab1:
     st.info("ℹ️ El sistema está **naturalmente balanceado**: las devoluciones compensan los retiros en el largo plazo. La búsqueda binaria encontró el stock óptimo en solo 15 evaluaciones.")
 
 # ─────────────────────────────────────────────────────────
+# TAB 3: ANÁLISIS EMPÍRICO
+# ─────────────────────────────────────────────────────────
+
+with tab3:
+    st.header("Resultados del análisis empírico")
+    st.subheader("Curva de sensibilidad: S₀ vs % rechazos")
+    
+    fig = go.Figure()
+    fig.add_scatter(
+        x=df_resultados['S0'],
+        y=df_resultados['pct_medio'],
+        mode='lines+markers',
+        name='% Rechazos',
+        line=dict(color='#0077b6', width=3),
+        marker=dict(size=8)
+    )
+    fig.add_hline(y=5, line_dash="dash", line_color="red",
+                 annotation_text="Umbral 5%", annotation_position="right")
+    fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
+                 line_color="green", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
+    fig.update_layout(
+        xaxis_title="% Rechazos por Réplica",
+        yaxis_title="Frecuencia",
+        height=450,
+        template='plotly_white',
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff',
+        font=dict(color='#424242'),
+        xaxis=dict(
+            title_font=dict(color='#424242'),
+            tickfont=dict(color='#424242'),
+            gridcolor='#e0e0e0'  # ← Gris claro
+        ),
+        yaxis=dict(
+            title_font=dict(color='#424242'),
+            tickfont=dict(color='#424242'),
+            gridcolor='#e0e0e0'  # ← Gris claro
+        ),
+        hovermode='x'
+    )
+
+
+
+
+    st.plotly_chart(fig, use_container_width=True)
+    
+    st.subheader("Metadata del análisis")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Observaciones", f"{metadata['n_observaciones']:,}")
+    with col2:
+        st.metric("Evaluaciones DES", metadata['n_evaluaciones'])
+        
+# ─────────────────────────────────────────────────────────
 # TAB 2: SIMULADOR
 # ─────────────────────────────────────────────────────────
 
@@ -591,63 +645,12 @@ with tab2:
     else:
         st.info("👆 Ajustar los parámetros y presionar **EJECUTAR SIMULACIÓN**")
 
-# ─────────────────────────────────────────────────────────
-# TAB 3: ANÁLISIS EMPÍRICO
-# ─────────────────────────────────────────────────────────
 
-with tab3:
-    st.header("Resultados del análisis empírico")
-    st.subheader("Curva de sensibilidad: S₀ vs % rechazos")
-    
-    fig = go.Figure()
-    fig.add_scatter(
-        x=df_resultados['S0'],
-        y=df_resultados['pct_medio'],
-        mode='lines+markers',
-        name='% Rechazos',
-        line=dict(color='#0077b6', width=3),
-        marker=dict(size=8)
-    )
-    fig.add_hline(y=5, line_dash="dash", line_color="red",
-                 annotation_text="Umbral 5%", annotation_position="right")
-    fig.add_vline(x=parametros['s0_recomendado'], line_dash="dot",
-                 line_color="green", annotation_text=f"S₀ óptimo = {parametros['s0_recomendado']}")
-    fig.update_layout(
-        xaxis_title="% Rechazos por Réplica",
-        yaxis_title="Frecuencia",
-        height=450,
-        template='plotly_white',
-        paper_bgcolor='#ffffff',
-        plot_bgcolor='#ffffff',
-        font=dict(color='#424242'),
-        xaxis=dict(
-            title_font=dict(color='#424242'),
-            tickfont=dict(color='#424242'),
-            gridcolor='#e0e0e0'  # ← Gris claro
-        ),
-        yaxis=dict(
-            title_font=dict(color='#424242'),
-            tickfont=dict(color='#424242'),
-            gridcolor='#e0e0e0'  # ← Gris claro
-        ),
-        hovermode='x'
-    )
-
-
-
-
-    st.plotly_chart(fig, use_container_width=True)
-    
-    st.subheader("Metadata del análisis")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("Observaciones", f"{metadata['n_observaciones']:,}")
-    with col2:
-        st.metric("Evaluaciones DES", metadata['n_evaluaciones'])
 
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
