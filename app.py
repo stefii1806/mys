@@ -367,7 +367,7 @@ with tab1:
     with col1:
         st.metric("🚴 λ (arribos/h)", f"{parametros['lambda_global']:.2f}")
     with col2:
-        st.metric("⏱️ Duración media", f"{parametros['duracion_media_min']:.0f} min")
+        st.metric("⏱️ Duración media de los viajes", f"{parametros['duracion_media_min']:.0f} min")
     with col3:
         st.metric("🔴 Leak empírico", f"{parametros['leak_mediana']*100:.1f}%")
     with col4:
@@ -648,6 +648,7 @@ with tab3:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
