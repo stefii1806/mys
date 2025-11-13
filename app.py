@@ -501,7 +501,7 @@ with tab2:
             "📦 Stock Inicial (S₀)",
             min_value=1,
             max_value=150,
-            value=67,
+            value=42,
             step=1,
             help="Bicis disponibles al inicio"
         )
@@ -510,7 +510,7 @@ with tab2:
         factor_demanda = st.slider(
             "📈 Factor demanda (m)",
             min_value=0.5,
-            max_value=2.0,
+            max_value=10.0,
             value=1.0,
             step=0.1,
             help="1.0 = actual, 1.5 = +50%"
@@ -520,7 +520,7 @@ with tab2:
         leak_usuario = st.slider(
             "🔴 Leak (%)",
             min_value=0.0,
-            max_value=20.0,
+            max_value=50.0,
             value=0.6,
             step=0.1,
             help="% bicis que no retornan"
@@ -650,6 +650,7 @@ with tab2:
 # FOOTER
 st.markdown("---")
 st.markdown("**Desarrollado por:** Stefania Cuicchi | **Curso:** Modelos y Simulación 2025, LAyGD, UNSL | **Método:** DES + Bootstrap + Búsqueda binaria")
+
 
 
 
